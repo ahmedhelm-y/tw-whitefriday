@@ -4848,24 +4848,27 @@
             "path": "templates.white-classic",
             "category_id": "814202285",
             "primary_color": "",
-            "thumbnail": "templates-thumbs/white-classic.jpg",
-            "is_default": true
+            "thumbnail": "https://cdn.assets.salla.network/previews/rbrqx51hydny/assets/acb43e35f8a33284be791f7309e36e406f4529287d935ac6366e83ae9a753822/templates-thumbs/white-classic.jpg",
+            "is_default": true,
+            "public_preview_url": "https://salla.design/preview/s/rbrqx51hydny/white-classic"
         },
         {
             "id": "bb41157f-525c-486a-99b8-844ec03ea5eb",
             "path": "templates.black-luxe",
             "category_id": "814202285",
             "primary_color": "",
-            "thumbnail": "templates-thumbs/black-luxe.jpg",
-            "is_default": false
+            "thumbnail": "https://cdn.assets.salla.network/previews/rbrqx51hydny/assets/d5962dec73e8d54cbfff02b3ac2948ae442c9d794ed4fc457ca35db783ee628d/templates-thumbs/black-luxe.jpg",
+            "is_default": false,
+            "public_preview_url": "https://salla.design/preview/s/rbrqx51hydny/black-luxe"
         },
         {
             "id": "10c10321-034a-4dac-8887-eb4746082b27",
             "path": "templates.coming-soon",
             "category_id": "665151403",
             "primary_color": "",
-            "thumbnail": "templates-thumbs/coming-soon.jpg",
-            "is_default": false
+            "thumbnail": "https://cdn.assets.salla.network/previews/rbrqx51hydny/assets/d333c4c84b59b3ebe41f3bb2ff2a5636e50fed1c5fa8afa7f906357082110b23/templates-thumbs/coming-soon.jpg",
+            "is_default": false,
+            "public_preview_url": "https://salla.design/preview/s/rbrqx51hydny/coming-soon"
         }
     ]
 }
