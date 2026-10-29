@@ -1,11 +1,11 @@
 {
     "name": {
         "ar": "الجمعة البيضاء",
-        "en": "White Friday"
+        "en": "whitefriday"
     },
     "description": {
-        "ar": "صفحة هبوط لعروض الجمعة البيضاء بعداد وعروض الساعة وألعاب الخصم",
-        "en": "A White Friday landing page with a countdown, hour deals and discount games"
+        "ar": null,
+        "en": null
     },
     "author_email": "ahmedhelmy2722@gmail.com",
     "support_url": "https://badeehah.com",
