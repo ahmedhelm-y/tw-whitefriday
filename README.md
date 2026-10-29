@@ -1,220 +1,61 @@
-# whitefriday
+# الجمعة البيضاء (White Friday)
 
+باندل صفحة هبوط لعروض الجمعة البيضاء على سلة. نوعه Component Bundle، وفيه `"features": ["landing-page-templates"]`.
+متبني على نفس أساس «عطرك» و«عبايتك» (شرح المعمارية في `docs/ARCHITECTURE.md` في `tw-your-perfume`)، والـ prefix هنا `wf-`.
+الأفكار والمصادر في `docs/ideas.md`.
 
+## الأقسام (14)
 
-This starter kit provides a foundation for building custom Twilight components for Salla's e-commerce platform. It includes a pre-configured build setup and development environment to help you get started quickly.
+| القسم | المجلد | بيعمل إيه |
+|---|---|---|
+| رأس الصفحة | `page-header` | اللوجو، والروابط، والوضع الداكن، و"لون البراند" |
+| العرض | `sale-hero` | **قبل** العرض: عداد، و"ذكّريني" (ملف تقويم)، ولينك القناة، وكود الدخول المبكر. **أثناء**ه: عداد للنهاية وزرار للعروض. **بعد**ه: "انتهى العرض". بينشر المواعيد لباقي الأقسام |
+| شبكة العروض | `deal-grid` | أقسام، وفلتر بنسبة الخصم، وكل كارت بيشتري بالـ options |
+| عرض الساعة | `hour-deal` | عرض بمواعيد يومية (من الساعة كام لكام)، وعداد، والعرض الجاي متغطي |
+| اكشطي عرضك المفاجئ | `scratch-coupon` | كذا كود بنسب ظهور، والكود ثابت لكل زائرة |
+| صندوق المفاجآت | `mystery-box` | منتج بقيمة أكبر من سعره، وتلميحات، وصور مموهة |
+| تقويم الأبواب | `advent-doors` | باب لكل يوم من أيام العرض |
+| العبي واكسبي | `coupon-game` | اختاري هدية من 3، أو طابقي الكروت |
+| كل ما تزيدي تكسبي أكتر | `tier-bar` | مستويات الخصم، و"باقيلك X" من إجمالي السلة |
+| باقات العرض | `deal-bundles` | "اصنع باقتك" من «عطرك» |
+| خصومات البنوك | `bank-offers` | شعار وعرض وكود ونسخ، ويختفي بعد تاريخه |
+| أسئلة العرض | `sale-faq` | أول سؤال "امتى يبدأ؟" من مواعيد العرض |
+| التذييل، وشريط الشراء الثابت | `page-footer`، `sticky-buy` | زي «عبايتك» |
 
-## Getting Started
+**قواعد مهمة:**
+- **الأقسام المقفولة قبل العرض** (`gated = true` في `WfSection`): شبكة العروض، وعرض الساعة، والصندوق، والباقات. بتختفي عن العملاء قبل البداية، إلا لو معاهم كود الدخول المبكر. في المحرر وفي معاينة سلة بتظهر دايماً.
+- **الأكواد:** بتظهر للعملاء بس لما التاجر يفعّل "عملت الأكواد دي في سلة" (`codes_ready`) في كل قسم. القوالب فيها أكواد تجريبية.
+- **المواعيد بتوقيت المتجر** (+3 افتراضياً)، والمنطق كله في `src/utils/sale.ts` ومعاه اختبارات.
+- **معاينة سلة (salla.design)** بتشتغل كمحرر، فالقالب بيختار الحالة اللي تظهر فيها بحقل `preview_phase`.
 
-1. Clone this repository
-2. Remove the example components in `src/components/` using:
-   ```
-   tw-delete-component
-   ```
-3. Create your own components using the component generator:
-   ```
-   tw-create-component <component-name>
-   ```
-4. Run `pnpm install` to install dependencies
-5. Run `pnpm run dev` to start the development server
-6. Run `pnpm run build` to build your components for production
+## القوالب (3)
 
-## Project Structure
+| القالب | الفكرة | لون البراند | الحالة في المعاينة |
+|---|---|---|---|
+| `white-classic` (الافتراضي) | أبيض بالأحمر | `#c8102e` | أثناء العرض |
+| `black-luxe` | داكن بالذهبي | `#b08d57` | أثناء العرض |
+| `coming-soon` | تشويق قبل العرض، والتقويم واللعبة في الأول | `#c2185b` | قبل العرض، ومعاه كود دخول مبكر |
 
-```
-src/
-  components/
-    your-component-name/
-      index.ts        # Main component file
-      styles.ts       # Component styles (optional)
-      types.ts        # Component types (optional)
-```
+المنتجات من متجر المعاينة `1616473` زي ما هي.
 
-## Built-in Plugins
-
-This starter kit includes three Vite plugins that handle the build process:
-
-### 1. Transform Plugin (`sallaTransformPlugin`)
-- Transforms component files to ensure proper naming and registration
-- Matches components in `src/components/*/index.ts`
-- To disable: Remove from `vite.config.ts` plugins array
-
-### 2. Build Plugin (`sallaBuildPlugin`)
-- Handles component bundling and output
-- Creates individual files for each component in `dist/`
-- Configures external dependencies (lit libraries)
-- To customize: Remove from plugins array and configure your own build settings:
-  ```typescript
-  {
-    build: {
-      lib: {
-        entry: {/* your entries */},
-        formats: ['es'],
-        fileName: (format, entryName) => `${entryName}.js`
-      },
-      rollupOptions: {
-        external: [/^lit/],
-        output: {/* your output config */}
-      }
-    }
-  }
-  ```
-
-### 3. Demo Plugin (`sallaDemoPlugin`)
-- Provides a development environment for testing components
-- Creates a demo page with your components
-- Configures hot module reloading
-- To disable: Remove from plugins array and set up your own dev server
-
-### Demo Plugin Options
-
-The `sallaDemoPlugin` accepts the following configuration options:
-
-```typescript
-{
-  // Optional: Show only specific components
-  components?: string[];
-
-  // Optional: Customize the demo grid layout
-  grid?: {
-    // CSS grid-template-columns value
-    columns?: string;     // default: 'repeat(auto-fill, minmax(300px, 1fr))'
-    
-    // Gap between components
-    gap?: string;        // default: '1rem'
-    
-    // Responsive breakpoint
-    minWidth?: string;   // default: '300px'
-  };
-
-  // Optional: Add custom CSS
-  css?: string;
-
-  // Optional: Add custom JavaScript
-  js?: string;
-}
-```
-
-#### Example Configuration
-
-```typescript
-// vite.config.ts
-export default defineConfig({
-  plugins: [
-    // ... other plugins
-    sallaDemoPlugin({
-      // Show only specific components
-      components: ['product-card', 'scroll-top'],
-      
-      // Customize grid layout
-      grid: {
-        columns: 'repeat(3, 1fr)',
-        gap: '1.5rem',
-        minWidth: '768px'
-      },
-
-      // Add custom styles
-      css: `
-        .component-card {
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-          transition: transform 0.2s;
-        }
-        .component-card:hover {
-          transform: translateY(-2px);
-        }
-      `,
-
-      // Add custom JavaScript
-      js: `
-        console.log('Demo page loaded!');
-        // Add your custom JavaScript here
-      `
-    })
-  ]
-});
-```
-
-## Component Management
-
-### Creating New Components
-
-This starter kit includes a component generator to help you create new components quickly. To use it, run:
+## التشغيل
 
 ```bash
-pnpm tw-create-component <component-name>
+pnpm install
+pnpm test && pnpm typecheck && pnpm build
+node scripts/serve.mjs 5191
+# http://127.0.0.1:5191/harness/landing.html?template=white-classic&landing=0
 ```
 
-Or run without arguments for interactive mode:
+`landing=0` بيعرض زي المعاينة (كل الأقسام). من غيره بيعرض زي صفحة حقيقية بالتاريخ الحقيقي.
 
-```bash
-pnpm tw-create-component
-```
+## حجم الباندل
 
-The generator will:
-1. Prompt you for a component name (in kebab-case format)
-2. Validate that the name is in kebab-case and doesn't already exist
-3. Create a new component folder with an `index.ts` file
-4. Add the component definition to `twilight-bundle.json`
+الحد 1 MB لما سلة تضغط الريبو. صور متجر الثيمات، والأيقونة، واللوجو، والصور المصغرة، والمراجع موجودين في branch `store-assets` بس.
+قبل `tw-preview` هات الصور المصغرة: `git checkout store-assets -- templates-thumbs && git restore --staged templates-thumbs`.
+اتأكد بعد أي تعديل: `git archive --format=zip HEAD | wc -c` لازم يفضل أقل من 1000000.
 
-### Deleting Components
+## محتاج تجربة على متجر حقيقي
 
-To remove a component, use:
-
-```bash
-pnpm tw-delete-component <component-name>
-```
-
-Or run without arguments to see a list of available components:
-
-```bash
-pnpm tw-delete-component
-```
-
-This will:
-1. Show a list of available components to select from
-2. Ask for confirmation before deletion
-3. Remove the component folder from `src/components/`
-4. Remove the component definition from `twilight-bundle.json`
-
-## Component Requirements
-
-Each component should:
-1. Be a class that extends `LitElement`
-2. Export the class as default
-3. Be placed in its own directory under `src/components/`
-4. Have an `index.ts` as the entry point
-
-Example:
-```typescript
-import { css, html, LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
-
-export default class MyComponent extends LitElement {
-  @property({ type: Object })
-  config?: {
-    name: string;
-    //... other properties
-  };
-
-  static styles = css`/* your styles */`;
-
-  render() {
-    return html`<div>Hello ${this.config?.name || 'World'}!</div>`;
-  }
-}
-```
-
-## Building for Production
-
-Run `pnpm run build` to create production-ready bundles in the `dist/` directory. Each component will have its own file named after the component (e.g., `my-component.js`).
-
-## Development
-
-Run `pnpm run dev` to start the development server. This will:
-1. Create a demo page with all your components
-2. Enable hot module reloading
-3. Provide a development environment for testing
-
-## License
-
-MIT
+- **"باقيلك X" في شريط المستويات:** بيقرا `Salla.cart.api.details()`. لو مش متاح في صفحة الهبوط، المستويات بتظهر من غير الشريط.
+- **"باقي X من Y" في عرض الساعة والصندوق:** بيظهر بس لو المنتج بيعرض الكمية الحقيقية.

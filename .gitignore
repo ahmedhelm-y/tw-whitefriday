@@ -1,0 +1,21 @@
+node_modules/
+.DS_Store
+*.log
+.env
+.env.*
+.idea/
+.vscode/
+.salla-preview.json
+
+# Local tooling / notes
+CLAUDE.md
+.claude/
+.playwright-mcp/
+
+# Plan workspaces
+.superpowers/
+
+# Generated images live on the store-assets branch
+templates-thumbs/
+marketplace/*.jpg
+marketplace/*.png
