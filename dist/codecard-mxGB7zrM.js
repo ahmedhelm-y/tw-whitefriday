@@ -1,5 +1,5 @@
 import { nothing as r, html as c } from "lit";
-import { i as s, t as a } from "./styles-CBhBCxUD.js";
+import { i as s, t as a } from "./styles-B5EzsqQ8.js";
 async function l(t, o) {
   try {
     return await navigator.clipboard.writeText(t), a({ ar: "اتنسخ الكود ✓", en: "Code copied ✓" });

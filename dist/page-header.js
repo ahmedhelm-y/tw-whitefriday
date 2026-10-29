@@ -1,16 +1,16 @@
 import { html as n, LitElement as k, nothing as f } from "lit";
 import { property as $, state as m } from "lit/decorators.js";
-import { a as M, b as C } from "./buy-Cnk1jDve.js";
-import { c as d, e as B, b as P, p as j, j as E, k as S, u, l as K, h as y, g as z, n as L, r as b, t as g } from "./styles-CBhBCxUD.js";
-var O = Object.defineProperty, c = (l, e, t, s) => {
-  for (var o = void 0, r = l.length - 1, a; r >= 0; r--)
-    (a = l[r]) && (o = a(e, t, o) || o);
+import { a as M, b as C } from "./buy-Dta8ARKq.js";
+import { d as l, e as B, c as P, p as j, j as E, k as S, u, l as K, b as y, g as z, n as L, r as b, t as g } from "./styles-B5EzsqQ8.js";
+var O = Object.defineProperty, c = (d, e, t, s) => {
+  for (var o = void 0, r = d.length - 1, a; r >= 0; r--)
+    (a = d[r]) && (o = a(e, t, o) || o);
   return o && O(e, t, o), o;
 };
-const _ = (l) => `
-${l} .wf-hd__logo--light.has-dark { display: none; }
-${l} .wf-hd__logo--dark { display: block; }
-${l} .wf-hd__logo--light:not(.has-dark) { filter: brightness(0) invert(1); }`, T = `
+const _ = (d) => `
+${d} .wf-hd__logo--light.has-dark { display: none; }
+${d} .wf-hd__logo--dark { display: block; }
+${d} .wf-hd__logo--light:not(.has-dark) { filter: brightness(0) invert(1); }`, T = `
 .wf-hd { position: relative; }
 .wf-hd--shadow { box-shadow: 0 1px 0 color-mix(in srgb, var(--wf-text) 12%, transparent); }
 .wf-hd--trans:not(.is-solid) { background: transparent; box-shadow: none; --wf-title: #fff; --wf-text: #fff; }
@@ -58,7 +58,7 @@ function I() {
 class h extends k {
   constructor() {
     super(...arguments), this.store = { logo: "", name: "" }, this.mode = "light", this.solid = !1, this.busy = !1, this.modeKey = "", this.paletteKey = "", this.paletteVars = [], this.onScroll = () => {
-      const e = !!d(this.config).sticky && this.getBoundingClientRect().top <= 1 && I() > 1;
+      const e = !!l(this.config).sticky && this.getBoundingClientRect().top <= 1 && I() > 1;
       e !== this.solid && (this.solid = e);
     };
   }
@@ -78,7 +78,7 @@ class h extends k {
   }
   // Palette and mode are applied before the first paint, so the page never flashes the wrong colors
   willUpdate() {
-    const e = d(this.config), t = j(e), s = JSON.stringify(t);
+    const e = l(this.config), t = j(e), s = JSON.stringify(t);
     if (s !== this.paletteKey) {
       this.paletteKey = s, this.clearPalette();
       for (const [r, a] of Object.entries(t)) document.documentElement.style.setProperty(r, a);
@@ -95,10 +95,10 @@ class h extends k {
     this.paletteVars = [];
   }
   baseMode() {
-    return String(u(d(this.config).default_mode) || "light");
+    return String(u(l(this.config).default_mode) || "light");
   }
   toggleShown() {
-    return d(this.config).show_mode_toggle !== !1;
+    return l(this.config).show_mode_toggle !== !1;
   }
   applyMode(e) {
     this.mode = e, document.documentElement.classList.toggle("wf-mode-dark", e === "dark"), document.documentElement.classList.toggle("wf-mode-light", e === "light");
@@ -112,13 +112,13 @@ class h extends k {
    * background, so it stays solid.
    */
   transparent() {
-    if (!d(this.config).transparent) return !1;
+    if (!l(this.config).transparent) return !1;
     const e = document.querySelector(".wf-section");
     return !!(e != null && e.matches("[data-wf-hero].wf-hero--overlay"));
   }
   /** Sticky and the transparent overlap go on the outermost box of the section, the editor's card included. */
   frame() {
-    const e = d(this.config), t = this.closest(".component-card") || this;
+    const e = l(this.config), t = this.closest(".component-card") || this;
     this.framed && this.framed !== t && this.unframe();
     const s = !!e.sticky, o = this.transparent();
     t.style.position = s ? "sticky" : o ? "relative" : "", t.style.top = s ? "0" : "", t.style.zIndex = s || o ? "30" : "", t.style.marginBottom = o ? `-${this.offsetHeight}px` : "", document.documentElement.style.setProperty("--wf-hd-h", s ? `${this.offsetHeight}px` : "0px"), this.framed = t;
@@ -144,7 +144,7 @@ class h extends k {
     e.kind === "error" && ((s = (t = y()) == null ? void 0 : t.error) == null || s.call(t, e.message));
   }
   render() {
-    const e = d(this.config), t = Math.min(Math.max(Number(e.logo_height) || 56, 24), 140), s = [
+    const e = l(this.config), t = Math.min(Math.max(Number(e.logo_height) || 56, 24), 140), s = [
       "wf-block wf-hd wf-auto",
       u(e.align) === "start" ? "" : "wf-hd--center",
       e.show_shadow !== !1 ? "wf-hd--shadow" : "",

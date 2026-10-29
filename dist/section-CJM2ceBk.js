@@ -1,7 +1,7 @@
 import { LitElement as E, nothing as c, html as u } from "lit";
 import { property as v, state as w } from "lit/decorators.js";
-import { a as N } from "./buy-Cnk1jDve.js";
-import { i as C, e as I, b as $, v as D, c as M, r as d, t as A, h as R, n as T, s as L, d as k, o as P } from "./styles-CBhBCxUD.js";
+import { a as N } from "./buy-Dta8ARKq.js";
+import { i as C, e as I, c as $, x as D, d as M, r as d, t as A, b as R, n as T, s as L, h as k, o as x } from "./styles-B5EzsqQ8.js";
 const i = 36e5;
 function W(t, e = 3) {
   if (typeof t != "string" || !t.trim()) return null;
@@ -10,7 +10,7 @@ function W(t, e = 3) {
   const [, n, o, s, a = "0", l = "0"] = r, g = Date.UTC(Number(n), Number(o) - 1, Number(s), Number(a), Number(l));
   return Number.isNaN(g) ? null : g - e * i;
 }
-function x(t, e, r) {
+function P(t, e, r) {
   return e !== null && t < e ? "before" : r !== null && t >= r ? "ended" : "live";
 }
 const p = "__wfSale", y = "wf-early";
@@ -41,7 +41,7 @@ function K(t) {
 }
 function V(t = Date.now(), e = b(), r = U(e)) {
   if (!e) return !0;
-  const n = x(t, e.start, e.end);
+  const n = P(t, e.start, e.end);
   return n === "live" || n === "before" && r;
 }
 function F(t) {
@@ -136,7 +136,7 @@ var O = Object.defineProperty, h = (t, e, r, n) => {
   return o && O(e, r, o), o;
 };
 function nt(t, e = "product") {
-  const r = P();
+  const r = x();
   if (r) return r;
   const n = t[e], o = Array.isArray(n) ? n[0] : n, s = o && typeof o == "object" ? o.value ?? o.id : o;
   return s ? String(s) : null;
@@ -213,7 +213,7 @@ export {
   et as e,
   Q as f,
   q as g,
-  x as h,
+  P as h,
   _ as i,
   U as j,
   J as k,

@@ -1,7 +1,7 @@
 import { nothing as m, html as i } from "lit";
-import { a as d, t as r, g as c, r as o, i as u } from "./styles-CBhBCxUD.js";
+import { a as d, t as r, g as c, r as o, i as u } from "./styles-B5EzsqQ8.js";
 import { f as p } from "./eta-DuPtGS8w.js";
-import { W as g, r as h } from "./section-Bp25z5NG.js";
+import { W as g, r as h } from "./section-CJM2ceBk.js";
 const q = `
 .wf-fq__list { display: grid; gap: .5rem; max-width: 52rem; margin-inline: auto; }
 .wf-fq__list details { border-radius: 1rem; background: var(--wf-card); }

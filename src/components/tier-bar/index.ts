@@ -3,6 +3,7 @@ import { state } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { getCollectionItems, resolveText, t } from "../../utils/config";
 import { getSalla, isLandingPage, money } from "../../utils/landing";
+import { publishTiers } from "../../utils/drawer";
 import { tierProgress, type Tier } from "../../utils/sale";
 import { WfSection } from "../../utils/section";
 
@@ -69,6 +70,8 @@ export default class TierBar extends WfSection {
       .filter((x) => x.amount > 0 && x.reward)
       .sort((a, b) => a.amount - b.amount)
       .slice(0, 4);
+    // The side cart shows the same next reward under its total
+    publishTiers(tiers);
     if (!tiers.length) {
       if (isLandingPage()) return nothing;
       return this.frame(html`<p class="wf-empty">${t({ ar: "أضف المستويات: المبلغ والمكافأة", en: "Add the tiers: amount and reward" })}</p>`);

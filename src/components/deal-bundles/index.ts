@@ -3,6 +3,8 @@ import { state } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { bundleTotal, isAvailable, optionExtras, toItems, validateLines, type BundleLine } from "../../utils/bundle";
 import { buyAction } from "../../utils/buy";
+import { noteAdded } from "../../utils/cart";
+import { ensureDrawer, openDrawer } from "../../utils/drawer";
 import { getLocale, resolveText, t } from "../../utils/config";
 import { optionLabel } from "../../utils/fit";
 import { fetchProduct, isLandingPage, money } from "../../utils/landing";
@@ -65,6 +67,7 @@ export default class DealBundles extends WfSection {
 
   async connectedCallback() {
     super.connectedCallback();
+    ensureDrawer();
     const cfg = this.cfg();
     const products = (await Promise.all(productIds(cfg.products).map((id) => fetchProduct(id)))).filter((p) => p && isAvailable(p));
     this.lines = products.map((product) => ({ product, selected: cfg.preselect !== false, quantity: 1, options: {} }));
@@ -98,7 +101,14 @@ export default class DealBundles extends WfSection {
       this.querySelector<HTMLSelectElement>('select[aria-invalid="true"]')?.focus();
       return;
     }
-    await this.press({ items: toItems(this.lines) });
+    // The set goes into the cart and the side cart opens with its pieces, so the shopper can keep adding
+    const chosen = this.lines.filter((l) => l.selected).map((l) => ({ product: l.product, options: l.options, quantity: l.quantity }));
+    if (isLandingPage()) {
+      await this.press({ items: toItems(this.lines), stay: true });
+      if (this.error) return;
+    }
+    await noteAdded(chosen, getLocale());
+    openDrawer();
   }
 
   private renderCard(line: BundleLine, index: number) {

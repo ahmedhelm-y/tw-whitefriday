@@ -3,9 +3,11 @@ import { state } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { isAvailable } from "./bundle";
 import { buyAction } from "./buy";
+import { addAndStay } from "./cart";
 import { getLocale, t } from "./config";
 import { optionLabel } from "./fit";
-import { fetchProduct, money } from "./landing";
+import { fetchProduct, getSalla, money } from "./landing";
+import { ensureDrawer, openDrawer } from "./drawer";
 import { discountPercent } from "./sale";
 import { WfSection } from "./section";
 
@@ -46,6 +48,11 @@ export abstract class DealSection extends WfSection {
   @state() protected invalid: Record<string, number[]> = {};
   @state() protected pressing = "";
 
+  connectedCallback() {
+    super.connectedCallback();
+    ensureDrawer();
+  }
+
   protected pick(id: string, optionId: number, value: string) {
     const current = { ...(this.picks[id] || {}) };
     if (value) current[String(optionId)] = Number(value);
@@ -64,9 +71,19 @@ export abstract class DealSection extends WfSection {
       this.querySelector<HTMLSelectElement>(`[data-card="${id}"] select[aria-invalid="true"]`)?.focus();
       return;
     }
+    if (this.pressing) return;
+    // The card's product goes into the cart and the side cart opens, so the shopper can keep adding
     this.pressing = id;
-    await this.press({ items: [{ id, quantity: 1, options: Object.keys(chosen).length ? chosen : undefined, max: Number(product.max_quantity) || undefined }], product });
-    this.pressing = "";
+    this.error = "";
+    try {
+      await addAndStay(product, chosen, 1, getLocale());
+      openDrawer();
+    } catch (error: any) {
+      this.error = error?.message || "";
+      (getSalla() as any)?.error?.(this.error);
+    } finally {
+      this.pressing = "";
+    }
   }
 
   /** The required option pickers of a product, each tied to its card for focus on a missed choice. */

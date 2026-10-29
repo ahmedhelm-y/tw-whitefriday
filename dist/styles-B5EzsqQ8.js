@@ -5,7 +5,7 @@ function v() {
   var t, e;
   return ((e = (t = h()) == null ? void 0 : t.config) == null ? void 0 : e.get("theme.settings")) || {};
 }
-function I() {
+function E() {
   var t, e;
   return ((e = (t = h()) == null ? void 0 : t.config) == null ? void 0 : e.get("page.is_landing_page")) === !0;
 }
@@ -16,7 +16,7 @@ function V() {
 }
 function M() {
   var e, n;
-  if (!I() || V() !== "product") return null;
+  if (!E() || V() !== "product") return null;
   const t = (n = (e = v().product) == null ? void 0 : e.value) == null ? void 0 : n[0];
   return t ? String(t) : null;
 }
@@ -24,7 +24,7 @@ function U() {
   const t = v();
   return { text: String(t.main_btn_text || ""), url: String(t.main_btn_url || "") };
 }
-const P = "1616473", _ = ["images", "rating", "sold_quantity", "options"];
+const R = "1616473", _ = ["images", "rating", "sold_quantity", "options"];
 async function y(t, e) {
   var n;
   try {
@@ -42,7 +42,7 @@ async function G(t) {
   if (!t) return null;
   await ((o = e == null ? void 0 : e.onReady) == null ? void 0 : o.call(e));
   const n = String(((r = e == null ? void 0 : e.config) == null ? void 0 : r.get("store.id")) || "");
-  if (I()) {
+  if (E()) {
     if (String(t) !== M()) return n ? y(t, n) : null;
     try {
       const f = await ((c = e == null ? void 0 : e.product) == null ? void 0 : c.api.getDetails(t, _));
@@ -51,7 +51,7 @@ async function G(t) {
       return null;
     }
   }
-  return n && await y(t, n) || y(t, P);
+  return n && await y(t, n) || y(t, R);
 }
 function Q() {
   const t = document.querySelector(".s-block--fast-checkout"), e = t == null ? void 0 : t.getAttribute("data-layout");
@@ -61,7 +61,7 @@ function Q() {
   }
   t.scrollIntoView({ behavior: "smooth", block: "center" });
 }
-function R(t, e = 20) {
+function P(t, e = 20) {
   if (t <= 1) return;
   const n = document.querySelector(
     ".s-block--fast-checkout salla-quantity-input, .s-block--fast-checkout-main salla-quantity-input"
@@ -70,7 +70,7 @@ function R(t, e = 20) {
     n.setValue(t);
     return;
   }
-  e > 0 && window.setTimeout(() => R(t, e - 1), 100);
+  e > 0 && window.setTimeout(() => P(t, e - 1), 100);
 }
 function X(t) {
   const e = h();
@@ -79,27 +79,30 @@ function X(t) {
 function Z(t) {
   return t ? t.component && typeof t.component == "object" ? t.component : t : {};
 }
-function E() {
+function $() {
   var t, e, n;
   return ((n = (e = (t = window.Salla) == null ? void 0 : t.lang) == null ? void 0 : e.getLocale) == null ? void 0 : n.call(e)) || document.documentElement.lang || "ar";
 }
-function tt(t) {
+function tt() {
+  return (document.documentElement.dir || ($() === "ar" ? "rtl" : "ltr")) === "rtl";
+}
+function et(t) {
   if (t == null || t === "") return "";
   if (typeof t == "string") return t;
   if (typeof t == "object") {
-    const e = t, n = E() === "en" ? "en" : "ar";
+    const e = t, n = $() === "en" ? "en" : "ar";
     return e[n] || e[n === "en" ? "ar" : "en"] || "";
   }
   return String(t);
 }
-function et(t) {
-  return E() === "ar" ? t.ar : t.en;
+function nt(t) {
+  return $() === "ar" ? t.ar : t.en;
 }
 function L(t) {
   var e;
   return Array.isArray(t) ? ((e = t[0]) == null ? void 0 : e.value) ?? t[0] ?? "" : t && typeof t == "object" && "value" in t ? t.value : t ?? "";
 }
-function nt(t, e) {
+function rt(t, e) {
   return Array.isArray(t) ? t.map((n) => {
     if (!n || typeof n != "object") return {};
     const o = {};
@@ -108,14 +111,14 @@ function nt(t, e) {
     return o;
   }) : [];
 }
-function rt(t) {
+function ot(t) {
   return String(t ?? "").trim().replace(/^#+/, "").trim();
 }
-function ot(t) {
+function ct(t) {
   const e = String(t ?? "").trim();
   return e ? /^(https?:|mailto:|tel:)/i.test(e) ? e : /^[a-z][a-z0-9+.-]*:/i.test(e) ? "" : /^[\w-]+(\.[\w-]+)+/.test(e) ? `https://${e}` : "" : "";
 }
-const N = ["bg", "card", "title", "text", "accent"], $ = "#111111", a = "#ffffff", j = 4.5;
+const N = ["bg", "card", "title", "text", "accent"], S = "#111111", a = "#ffffff", A = 4.5;
 function g(t) {
   if (typeof t != "string") return null;
   const e = t.trim().replace(/^#/, "");
@@ -123,14 +126,14 @@ function g(t) {
   const n = e.length === 3 ? e.replace(/./g, (o) => o + o) : e;
   return [0, 2, 4].map((o) => parseInt(n.slice(o, o + 2), 16));
 }
-function A([t, e, n]) {
+function j([t, e, n]) {
   return "#" + [t, e, n].map((o) => Math.round(o).toString(16).padStart(2, "0")).join("");
 }
 function b(t) {
   const e = g(t);
-  return e ? A(e) : null;
+  return e ? j(e) : null;
 }
-function S(t) {
+function T(t) {
   const [e, n, o] = t.map((r) => {
     const c = r / 255;
     return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
@@ -140,18 +143,18 @@ function S(t) {
 function d(t, e) {
   const n = g(t), o = g(e);
   if (!n || !o) return 1;
-  const [r, c] = [S(n), S(o)].sort((i, f) => f - i);
+  const [r, c] = [T(n), T(o)].sort((i, f) => f - i);
   return (r + 0.05) / (c + 0.05);
 }
 function m(t) {
-  const e = d($, t) >= d(a, t) ? $ : a;
-  return d(e, t) >= j ? e : "#000000";
+  const e = d(S, t) >= d(a, t) ? S : a;
+  return d(e, t) >= A ? e : "#000000";
 }
 function l(t, e, n) {
   const o = g(t), r = g(e);
-  return A(o.map((c, i) => c + (r[i] - c) * n));
+  return j(o.map((c, i) => c + (r[i] - c) * n));
 }
-function s(t, e, n, o = j) {
+function s(t, e, n, o = A) {
   let r = t;
   for (let c = 0; c < 20 && e.some((i) => d(r, i) < o); c++)
     r = l(r, n, 0.05 * (c + 1));
@@ -214,7 +217,7 @@ function O(t, e) {
   }
   return n;
 }
-function ct(t) {
+function it(t) {
   const e = {};
   if (b(t.brand_color)) {
     const n = q(t.brand_color);
@@ -230,16 +233,16 @@ function K(t) {
   let o = e;
   return d(e, u.dark.bg) < 3 && (o = s(e, [u.dark.bg], a, 3), n["--wf-d-accent"] = o, n["--wf-d-accent-text"] = m(o)), n["--wf-l-accent-ink"] = s(e, [u.light.bg, u.light.card], w), n["--wf-d-accent-ink"] = s(o, [u.dark.bg, u.dark.card], a), n;
 }
-function it(t) {
+function at(t) {
   return Object.entries(O(t, "--wf-s-")).map(([e, n]) => `${e}:${n}`).join(";");
 }
-function at(t) {
+function st(t) {
   const e = String(L(t.color_scheme) || "auto");
   return e === "dark" ? "wf-dark" : e === "light" ? "" : "wf-auto";
 }
 const z = "wf-mode";
 let x = null;
-function st(t) {
+function ft(t) {
   if (x) return x;
   try {
     const e = JSON.parse(localStorage.getItem(z) || "null");
@@ -248,18 +251,18 @@ function st(t) {
   }
   return null;
 }
-function ft(t, e, n) {
+function lt(t, e, n) {
   var o;
   return e && n ? n : t === "system" ? (o = window.matchMedia) != null && o.call(window, "(prefers-color-scheme: dark)").matches ? "dark" : "light" : t === "dark" ? "dark" : "light";
 }
-function lt(t, e) {
+function ut(t, e) {
   x = t;
   try {
     localStorage.setItem(z, JSON.stringify({ mode: t, base: e }));
   } catch {
   }
 }
-function ut(t) {
+function dt(t) {
   var r;
   if (typeof IntersectionObserver > "u" || (r = window.matchMedia) != null && r.call(window, "(prefers-reduced-motion: reduce)").matches) return;
   t.classList.add("wf-reveal");
@@ -283,11 +286,11 @@ function F(t, e) {
   const n = document.createElement("style");
   n.id = t, n.textContent = e, document.head.appendChild(n);
 }
-const H = ["bg", "card", "title", "text", "accent", "accent-text", "accent-ink"], T = (t, e) => u[t][e === "accent-text" ? "accentText" : e === "accent-ink" ? "accentInk" : e], Y = {
+const H = ["bg", "card", "title", "text", "accent", "accent-text", "accent-ink"], C = (t, e) => u[t][e === "accent-text" ? "accentText" : e === "accent-ink" ? "accentInk" : e], Y = {
   accent: "--color-primary",
   "accent-text": "--color-primary-reverse"
 }, k = (t) => H.map((e) => {
-  const n = t === "l" ? "light" : "dark", o = Y[e], r = o ? `var(${o}, ${T(n, e)})` : T(n, e);
+  const n = t === "l" ? "light" : "dark", o = Y[e], r = o ? `var(${o}, ${C(n, e)})` : C(n, e);
   return `--wf-${e}: var(--wf-s-${t}-${e}, var(--wf-${t}-${e}, ${r}));`;
 }).join(" "), J = `
 .wf-host { display: block; width: 100%; min-width: 0; container-type: inline-size; }
@@ -326,40 +329,41 @@ html.wf-mode-ready .wf-block { transition: background-color .3s ease, color .3s 
 @media (prefers-reduced-motion: reduce) { .wf-btn, html.wf-mode-ready .wf-block { transition: none; } .wf-btn:hover { transform: none; } }
 ${W}
 `;
-let C = !1;
-function dt() {
-  if (F("wf-base", J), C) return;
-  C = !0;
+let I = !1;
+function mt() {
+  if (F("wf-base", J), I) return;
+  I = !0;
   const t = document.documentElement;
   if (t.style.getPropertyValue("--wf-d-accent")) return;
   const e = getComputedStyle(t).getPropertyValue("--color-primary").trim();
   for (const [n, o] of Object.entries(K(e))) t.style.setProperty(n, o);
 }
 export {
-  E as a,
-  F as b,
-  Z as c,
-  it as d,
-  dt as e,
+  V as A,
+  $ as a,
+  h as b,
+  F as c,
+  Z as d,
+  mt as e,
   G as f,
-  nt as g,
-  h,
-  I as i,
-  ft as j,
-  st as k,
-  lt as l,
+  rt as g,
+  at as h,
+  E as i,
+  lt as j,
+  ft as k,
+  ut as l,
   X as m,
-  rt as n,
+  ot as n,
   M as o,
-  ct as p,
+  it as p,
   U as q,
-  tt as r,
-  at as s,
-  et as t,
+  et as r,
+  st as s,
+  nt as t,
   L as u,
-  ut as v,
-  ot as w,
-  Q as x,
-  R as y,
-  V as z
+  tt as v,
+  ct as w,
+  dt as x,
+  Q as y,
+  P as z
 };

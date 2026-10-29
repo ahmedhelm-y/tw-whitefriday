@@ -13,6 +13,8 @@ export type BuyRequest = {
   items?: BuyItem[];
   fallbackUrl?: string;
   product?: any;
+  /** Add the items and keep the shopper on the page (the side cart shows them) instead of going to checkout. */
+  stay?: boolean;
 };
 export type BuyResult = { kind: "fast-checkout" | "cart" | "link" | "none" | "error"; message?: string };
 
@@ -48,7 +50,7 @@ window.addEventListener("pageshow", () => {
 export function buy(req: BuyRequest = {}): Promise<BuyResult> {
   if (inflight) return inflight;
   const current = withTimeout(run(req)).then((result) => {
-    if (result.kind !== "cart" && inflight === current) inflight = null;
+    if ((result.kind !== "cart" || req.stay) && inflight === current) inflight = null;
     return result;
   });
   inflight = current;
@@ -101,12 +103,74 @@ function track(req: BuyRequest, kind: BuyResult["kind"], quantity: number): void
   }
 }
 
-function errorMessage(error: any): string {
+export function errorMessage(error: any): string {
   return (
     error?.response?.data?.error?.message ||
     error?.message ||
     t({ ar: "تعذر إكمال الطلب، حاول مرة أخرى", en: "We couldn't complete the order, please try again" })
   );
+}
+
+/** The store's own cart page: it holds the same cart and handles login and checkout itself. */
+export function cartPageUrl(): string {
+  const Salla = getSalla() as any;
+  try {
+    const url = Salla?.url?.get?.("cart");
+    if (url) return String(url);
+  } catch {
+    // fall through to the store address
+  }
+  const store = String(Salla?.config?.get("store.url") || location.origin).replace(/\/+$/, "");
+  return `${store}/cart`;
+}
+
+/** How long a submit may take to start checkout or open login before the cart page takes over. */
+export const checkoutTiming = { ms: 6000 };
+
+/**
+ * Sends the cart to checkout with Salla's submit, which goes to payment, or opens Salla's login for a guest
+ * when the store has no guest checkout. If it fails, or nothing happens within a few seconds (no page change
+ * and no login window), the shopper goes to the store's cart page, which carries the same cart.
+ * Resolves false only when not even that is possible.
+ */
+export async function checkout(): Promise<boolean> {
+  const Salla = getSalla() as any;
+  const cart = Salla?.cart?.api;
+  const fallback = () => {
+    nav.go(cartPageUrl());
+    return true;
+  };
+  if (!cart?.submit) return fallback();
+  let handled = false;
+  // A login request counts only when the page has Salla's login window to show it
+  const onLogin = () => (handled = Boolean(document.querySelector("salla-login-modal")));
+  const onLeave = () => (handled = true);
+  const start = location.href;
+  const leaving = () => location.href !== start;
+  try {
+    Salla?.event?.on?.("login::open", onLogin);
+  } catch {
+    // no event bus: the timer alone decides
+  }
+  window.addEventListener("pagehide", onLeave, { once: true });
+  window.addEventListener("beforeunload", onLeave, { once: true });
+  const timer = new Promise<"wait">((resolve) => window.setTimeout(() => resolve("wait"), checkoutTiming.ms));
+  try {
+    const submitted = Promise.resolve(cart.submit()).then(() => "ok" as const);
+    await Promise.race([submitted, timer]);
+    // Submit resolves right after it starts the move to checkout or opens login; give either a moment to show
+    if (!handled) await timer;
+    if (!handled && !leaving()) return fallback();
+    return true;
+  } catch {
+    return handled ? true : fallback();
+  } finally {
+    try {
+      Salla?.event?.off?.("login::open", onLogin);
+    } catch {
+      // ignore
+    }
+  }
 }
 
 async function run(req: BuyRequest): Promise<BuyResult> {
@@ -151,12 +215,9 @@ async function run(req: BuyRequest): Promise<BuyResult> {
     }
     // The tier bar re-reads the cart once items are in
     window.dispatchEvent(new Event("wf:cart"));
-    try {
-      await cart.submit();
-      return { kind };
-    } catch (error) {
-      return { kind: "error", message: errorMessage(error) };
-    }
+    if (req.stay) return { kind };
+    const done = await checkout();
+    return done ? { kind } : { kind: "error", message: errorMessage(null) };
   }
 
   if (kind === "link") {

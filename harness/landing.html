@@ -142,7 +142,16 @@
 
     // The cart is stubbed so checks never touch a real store cart; ?realcart=1 keeps it
     if (!params.get("realcart") && Salla.cart?.api) {
-      Salla.cart.api.addItem = async (item) => { window.harnessLog.push("addItem:" + JSON.stringify(item)); log("cart addItem", item); return { data: {} }; };
+      // A small in-page cart answers like Salla's: { data: { cart: { items } } }
+      const fake = { seq: 100, items: [] };
+      const answer = () => ({ data: { cart: { items: fake.items.map((i) => ({ ...i })) } } });
+      Salla.cart.api.addItem = async (item) => {
+        window.harnessLog.push("addItem:" + JSON.stringify(item)); log("cart addItem", item);
+        fake.items.push({ id: ++fake.seq, product_id: Number(item.id), quantity: item.quantity || 1 });
+        return answer();
+      };
+      Salla.cart.api.details = async () => answer();
+      Salla.cart.api.deleteItem = async (id) => { window.harnessLog.push("deleteItem:" + id); fake.items = fake.items.filter((i) => i.id !== id); return answer(); };
       Salla.cart.api.submit = async () => { window.harnessLog.push("submit"); log("cart submit"); return {}; };
     }
 
