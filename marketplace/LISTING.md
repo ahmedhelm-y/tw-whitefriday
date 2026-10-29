@@ -13,6 +13,7 @@
 **AR (طويل):**
 صفحة هبوط كاملة لعروض الجمعة البيضاء، بتتغير لوحدها حسب التاريخ: قبل العرض عداد وزرار "ذكّريني"، وأثناءه العروض وعداد النهاية، وبعده رسالة "انتهى العرض".
 14 قسماً: رأس الصفحة، والعرض بثلاث حالات مع الدخول المبكر بكود، وشبكة العروض بأزرار الأقسام ونسب الخصم، وعرض الساعة اللي بيتغير كل كام ساعة، واكشطي عرضك المفاجئ، وصندوق المفاجآت، وتقويم الأبواب (كل يوم باب جديد)، والعبي واكسبي كود خصم، وشريط "كل ما تزيدي تكسبي أكتر"، وباقات العرض، وخصومات البنوك وطرق الدفع، وأسئلة العرض، والتذييل، وشريط الشراء الثابت.
+سلة جانبية: العميلة بتضيف كذا منتج وهي في الصفحة، وتشوف الإجمالي وباقيلها كام للمستوى الجاي، وبعدين تكمّل الطلب.
 ثلاثة قوالب جاهزة: الكلاسيك الأبيض، والأسود الفاخر، و"قريباً" للتشويق قبل العرض.
 الأكواد بتظهر للعملاء بس بعد ما تأكد إنك عملتها في سلة، عشان محدش يشوف كود مش شغال.
 كل النصوص بالعربي والإنجليزي، والتصميم متوافق مع الجوال.
@@ -22,6 +23,7 @@
 **EN (long):**
 A complete White Friday landing page that changes by itself with the date: before the sale a countdown and a "remind me" button, during it the deals and a countdown to the end, and after it a "sale ended" message.
 14 sections: a header, the three-phase sale hero with early access by code, a deal grid with category and discount filters, an hour deal that changes every few hours, a scratch-to-reveal mystery offer, a mystery box, a door-a-day calendar, a play-to-win code game, a spend-more-save-more tier bar, sale bundles, bank and payment offers, sale FAQs, a footer and a sticky buy bar.
+A side cart: shoppers add several products without leaving the page, see the total and how far the next tier is, then complete the order.
 Three ready templates: white classic, black luxe and a "coming soon" teaser.
 Codes show to shoppers only after you confirm you created them in Salla, so nobody sees a code that doesn't work.
 Every text is in Arabic and English, and every section works on phones.
