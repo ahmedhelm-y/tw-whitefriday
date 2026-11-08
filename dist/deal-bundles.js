@@ -1,10 +1,9 @@
 import { html as r, nothing as l } from "lit";
 import { state as g } from "lit/decorators.js";
 import { unsafeHTML as m } from "lit/directives/unsafe-html.js";
-import { e as q, i as P, v as j, t as A, n as B, o as L, a as N, b as O, c as D } from "./drawer-Bsbz3Eou.js";
-import { b as T } from "./buy-Dta8ARKq.js";
-import { f as E, t as c, i as C, a as S, m as u, r as z } from "./styles-B5EzsqQ8.js";
-import { W as H } from "./section-CJM2ceBk.js";
+import { e as q, i as P, v as j, t as A, n as B, o as L, a as N, b as O, c as D } from "./drawer-ByR1SNHU.js";
+import { f as T, t as c, i as C, a as S, m as u, r as z, b as E } from "./styles-DA4N1FjE.js";
+import { W as H } from "./section-sTarKlwB.js";
 var I = Object.defineProperty, _ = (o, e, i, t) => {
   for (var s = void 0, a = o.length - 1, p; a >= 0; a--)
     (p = o[a]) && (s = p(e, i, s) || s);
@@ -44,7 +43,7 @@ const W = `
 function M(o) {
   return (Array.isArray(o) ? o : typeof o == "string" ? o.split(",") : o ? [o] : []).map((i) => i && typeof i == "object" ? i.value ?? i.id : i).map((i) => String(i ?? "").trim()).filter(Boolean).slice(0, 6);
 }
-class b extends H {
+class f extends H {
   constructor() {
     super(...arguments), this.styleId = "deal-bundles", this.gated = !0, this.lines = [], this.loaded = !1, this.missing = {};
   }
@@ -53,7 +52,7 @@ class b extends H {
   }
   async connectedCallback() {
     super.connectedCallback(), q();
-    const e = this.cfg(), i = (await Promise.all(M(e.products).map((t) => E(t)))).filter((t) => t && P(t));
+    const e = this.cfg(), i = (await Promise.all(M(e.products).map((t) => T(t)))).filter((t) => t && P(t));
     this.lines = i.map((t) => ({ product: t, selected: e.preselect !== !1, quantity: 1, options: {} })), this.loaded = !0;
   }
   update_(e, i) {
@@ -92,13 +91,13 @@ class b extends H {
         </span>
       </button>
       ${s.length ? r`<div class="wf-bb__opts">${s.map((n) => {
-      const x = a.includes(Number(n.id)), k = `wf-bb-${t.id}-${n.id}`, f = O(n, S());
-      return r`<label class="wf-visually-hidden" for=${k}>${f}</label>
+      const x = a.includes(Number(n.id)), k = `wf-bb-${t.id}-${n.id}`, b = O(n, S());
+      return r`<label class="wf-visually-hidden" for=${k}>${b}</label>
               <select id=${k} aria-invalid=${x ? "true" : "false"} @change=${(d) => this.setOption(i, n.id, d.target.value)}>
-                <option value="">${c({ ar: `اختاري ${f}`, en: `Choose ${f}` })}</option>
+                <option value="">${c({ ar: `اختاري ${b}`, en: `Choose ${b}` })}</option>
                 ${n.details.map((d) => r`<option value=${d.id} ?disabled=${d.is_out} ?selected=${e.options[String(n.id)] === Number(d.id)}>${d.name}</option>`)}
               </select>
-              ${x ? r`<span class="wf-bb__miss">${c({ ar: `اختاري ${f}`, en: `Choose ${f}` })}</span>` : l}`;
+              ${x ? r`<span class="wf-bb__miss">${c({ ar: `اختاري ${b}`, en: `Choose ${b}` })}</span>` : l}`;
     })}</div>` : l}
     </li>`;
   }
@@ -106,7 +105,7 @@ class b extends H {
     if (this.closed()) return l;
     if (!this.lines.length)
       return !this.loaded || C() ? l : this.frame(r`<p class="wf-bb__empty">${c({ ar: "اختر منتجات الباقة من إعدادات هذا القسم", en: "Pick the set's products in this section's settings" })}</p>`);
-    const e = D(this.lines), i = z(this.cfg().offer_text), t = T({ items: [{ id: "x", quantity: 1 }] }) !== "none";
+    const e = D(this.lines), i = z(this.cfg().offer_text), t = E({ items: [{ id: "x", quantity: 1 }] }) !== "none";
     return this.frame(r`<ul class="wf-bb__grid">${this.lines.map((s, a) => this.renderCard(s, a))}</ul>
       <div class="wf-bb__bar">
         <div class="wf-bb__sum" aria-live="polite">
@@ -122,14 +121,14 @@ class b extends H {
 }
 _([
   g()
-], b.prototype, "lines");
+], f.prototype, "lines");
 _([
   g()
-], b.prototype, "loaded");
+], f.prototype, "loaded");
 _([
   g()
-], b.prototype, "missing");
-typeof b < "u" && b.registerSallaComponent("salla-deal-bundles");
+], f.prototype, "missing");
+typeof f < "u" && f.registerSallaComponent("salla-deal-bundles");
 export {
-  b as default
+  f as default
 };

@@ -33,8 +33,8 @@ const chain = (prefix: "l" | "d") =>
 export const baseCss = `
 .wf-host { display: block; width: 100%; min-width: 0; container-type: inline-size; }
 [data-wf-section] { scroll-margin-top: var(--wf-hd-h, 0px); }
-/* The last block keeps clear of the sticky buy bar while it shows */
-.wf-ft { padding-bottom: calc(1.25rem + var(--wf-sb-h, 0px)) !important; }
+/* The page's end keeps clear of the sticky buy bar while it shows */
+.wf-host:has(> .wf-sb:not(.wf-sb--inline)) { height: var(--wf-sb-h, 0px); }
 .component-card:has(> .wf-host:not(:empty)) { min-height: 0; }
 .wf-block { ${chain("l")}
   display: block; width: 100%; box-sizing: border-box; font-family: var(--font-main, inherit);
@@ -60,6 +60,8 @@ html.wf-mode-ready .wf-block { transition: background-color .3s ease, color .3s 
 .wf-btn:hover { transform: translateY(-1px); opacity: .92; }
 .wf-btn:focus-visible { outline: 2px solid var(--wf-accent-ink); outline-offset: 3px; }
 .wf-btn[disabled], .wf-btn[aria-busy="true"] { opacity: .6; cursor: progress; transform: none; }
+.wf-cta { display: flex; justify-content: center; margin-top: 2rem; }
+.wf-cta .wf-btn { min-width: min(100%, 16rem); }
 .wf-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .wf-error { margin-top: .5rem; color: #b42318; font-size: .875rem; }
 .wf-block.wf-dark .wf-error, html.wf-mode-dark .wf-auto .wf-error { color: #fda29b; }

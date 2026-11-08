@@ -1,14 +1,13 @@
 import { LitElement as v, nothing as l, html as n } from "lit";
 import { property as g, state as c } from "lit/decorators.js";
 import { unsafeHTML as h } from "lit/directives/unsafe-html.js";
-import { a as x, b as k } from "./buy-Dta8ARKq.js";
-import { e as $, c as q, f as S, o as I, b as H, m, d as B, u as C, r as P, q as E, t as b, s as z, h as L } from "./styles-B5EzsqQ8.js";
-var O = Object.defineProperty, a = (d, t, s, e) => {
+import { h as x, j as k, f as $, l as q, k as S, c as I, m as w, n as H, b as B, u as C, r as P, o as E, t as b, s as j, q as z } from "./styles-DA4N1FjE.js";
+var L = Object.defineProperty, a = (d, t, s, e) => {
   for (var i = void 0, r = d.length - 1, u; r >= 0; r--)
     (u = d[r]) && (i = u(t, s, i) || i);
-  return i && O(t, s, i), i;
+  return i && L(t, s, i), i;
 };
-const j = `
+const O = `
 .wf-sb { position: fixed; inset-inline: 0; bottom: 0; z-index: 40; padding-bottom: env(safe-area-inset-bottom);
   background: color-mix(in srgb, var(--wf-bg) 92%, transparent); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 -1px 0 color-mix(in srgb, var(--wf-text) 12%, transparent), 0 -12px 32px -24px rgb(0 0 0 / 45%);
@@ -47,7 +46,7 @@ class o extends v {
     return this;
   }
   async connectedCallback() {
-    super.connectedCallback(), this.classList.add("wf-host"), $(), q("wf-sticky-buy", j), window.setTimeout(() => this.watch(), 0), this.product = await S(I());
+    super.connectedCallback(), this.classList.add("wf-host"), x(), k("wf-sticky-buy", O), window.setTimeout(() => this.watch(), 0), this.product = await $(q());
   }
   disconnectedCallback() {
     super.disconnectedCallback(), this.observers.forEach((t) => t.disconnect()), this.observers = [], window.removeEventListener("scroll", this.onScroll), document.documentElement.style.removeProperty("--wf-sb-h");
@@ -86,29 +85,29 @@ class o extends v {
     this.busy = !0, this.error = "";
     let t;
     try {
-      t = await x({ quantity: this.quantity, product: this.product });
+      t = await S({ quantity: this.quantity, product: this.product });
     } finally {
       this.busy = !1;
     }
-    t.kind === "error" && (this.error = t.message || "", (e = (s = H()) == null ? void 0 : s.error) == null || e.call(s, t.message));
+    t.kind === "error" && (this.error = t.message || "", (e = (s = I()) == null ? void 0 : s.error) == null || e.call(s, t.message));
   }
   renderPrice() {
     const t = this.product, s = Number(t.is_on_sale ? t.sale_price : t.price) || 0, e = Number(t.regular_price) || 0;
-    return n`<span class="wf-sb__price"><b>${h(m(s))}</b>
-      ${t.is_on_sale && e > s ? n`<s>${h(m(e))}</s>` : l}</span>`;
+    return n`<span class="wf-sb__price"><b>${h(w(s))}</b>
+      ${t.is_on_sale && e > s ? n`<s>${h(w(e))}</s>` : l}</span>`;
   }
   render() {
     var p;
-    const t = B(this.config), s = k();
+    const t = H(this.config), s = B();
     if (s === "none") return l;
-    const e = this.product, i = this.inline(), r = i || this.pastHero && !this.checkoutInView, u = String(C(t.show_on) || "both"), w = P(t.buy_text) || (s === "link" ? E().text : "") || b({ ar: "اشتري الآن", en: "Buy now" }), f = Number(e == null ? void 0 : e.max_quantity) || 99, y = t.show_quantity !== !1 && s !== "link", _ = [
+    const e = this.product, i = this.inline(), r = i || this.pastHero && !this.checkoutInView, u = String(C(t.show_on) || "both"), m = P(t.buy_text) || (s === "link" ? E().text : "") || b({ ar: "اشتري الآن", en: "Buy now" }), f = Number(e == null ? void 0 : e.max_quantity) || 99, y = t.show_quantity !== !1 && s !== "link", _ = [
       "wf-block wf-sb",
-      z(t),
+      j(t),
       i ? "wf-sb--inline" : "",
       u === "mobile" ? "wf-sb--mobile" : u === "desktop" ? "wf-sb--desktop" : "",
       r ? "is-shown" : ""
     ].filter(Boolean).join(" ");
-    return n`<div class=${_} style=${L(t)} role="region" aria-label=${b({ ar: "شراء سريع", en: "Quick buy" })} aria-hidden=${r ? "false" : "true"}>
+    return n`<div class=${_} style=${z(t)} role="region" aria-label=${b({ ar: "شراء سريع", en: "Quick buy" })} aria-hidden=${r ? "false" : "true"}>
       <div class="wf-sb__inner">
         ${e ? n`<div class="wf-sb__info">
               ${(p = e.image) != null && p.url ? n`<img class="wf-sb__img" src=${e.image.url} alt="" loading="lazy" />` : l}
@@ -122,7 +121,7 @@ class o extends v {
               <output aria-live="polite">${this.quantity}</output>
               <button type="button" aria-label=${b({ ar: "تقليل الكمية", en: "Decrease quantity" })} tabindex=${r ? 0 : -1} ?disabled=${this.quantity <= 1} @click=${() => this.quantity = Math.max(1, this.quantity - 1)}>−</button>
             </div>` : l}
-        <button type="button" class="wf-btn wf-sb__buy" tabindex=${r ? 0 : -1} aria-busy=${this.busy ? "true" : "false"} @click=${() => this.onBuy()}>${w}</button>
+        <button type="button" class="wf-btn wf-sb__buy" tabindex=${r ? 0 : -1} aria-busy=${this.busy ? "true" : "false"} @click=${() => this.onBuy()}>${m}</button>
       </div>
       ${this.error ? n`<p class="wf-error wf-container" role="alert">${this.error}</p>` : l}
     </div>`;

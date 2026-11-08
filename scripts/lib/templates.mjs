@@ -3,16 +3,12 @@
 // "codes_ready" in each section, after creating the same codes in Salla.
 import { L, opt } from "./fields.mjs";
 
-// Sample logo for the template previews; the merchant swaps it for their own, or clears it to use the store logo
-const LOGO = "https://raw.githubusercontent.com/ahmedhelm-y/tw-whitefriday/store-assets/logo/";
-const logo = { logo: `${LOGO}logo.png`, logo_dark: `${LOGO}logo-dark.png` };
 const sel = (value, label) => [opt(value, label)];
 const product = (id, name) => [{ label: name, value: id, key: String(id) }];
 const many = (...list) => list.flatMap(([id, name]) => product(id, name));
 const rows = (prefix, list) => list.map((row) => Object.fromEntries(Object.entries(row).map(([k, v]) => [`${prefix}.${k}`, v])));
 
-export const ORDER = ["page-header", "sale-hero", "bank-offers", "deal-grid", "hour-deal", "tier-bar", "scratch-coupon", "deal-bundles",
-  "mystery-box", "advent-doors", "coupon-game", "sale-faq", "page-footer", "sticky-buy"];
+// Each template has one goal and only the sections that serve it; the rest of the bundle stays available in the editor
 
 const DEALS = many([45289979, "فستان"], [530339837, "فستان"], [819393274, "فستان"], [1728697337, "فستان"], [1802683624, "فستان"], [1163912169, "فستان"],
   [1769567998, "بلوزة"], [2052836592, "بلوزة"], [1303857404, "جاكيت"], [1411443697, "تنورة"], [679390711, "تنورة"], [355251448, "بنطلون"]);
@@ -63,81 +59,96 @@ const FAQS = rows("faqs", [
 const BUNDLE = { products: many([1769567998, "بلوزة"], [1411443697, "تنورة"], [1303857404, "جاكيت"]), offer_text: L("اشتري 2 ووفّري 30%", "Buy 2, save 30%") };
 const BOX = { product: product(854474996, "صندوق المفاجآت"), value_amount: 450,
   hints: rows("hints", [{ text: L("3 قطع مختارة من أفضل مبيعاتنا", "Three pieces from our bestsellers") }, { text: L("مقاسك اللي تختاريه", "In the size you choose") }, { text: L("ممكن يطلع فيه قطعة من الإصدار الجديد", "It might hold a new release") }]) };
-const footer = (about) => ({ about, show_payments: true });
+const WHY = (worry) => ({ worry, items: rows("items", [
+  { icon: "sicon-shipping-fast", title: L("توصيل سريع حتى في العرض", "Fast delivery, even in the sale"), text: L("نشحن خلال 1 لـ 3 أيام عمل، وتتابعي طلبك برسالة", "We ship in 1 to 3 working days, with tracking by message") },
+  { icon: "sicon-rotate", title: L("استرجاع خلال 7 أيام", "7-day returns"), text: L("المقاس ما ضبط؟ رجّعيه أو بدّليه بنفس السياسة", "Wrong size? Return or swap it under the same policy") },
+  { icon: "sicon-wallet", title: L("ادفعي بالطريقة اللي تريحك", "Pay the way you like"), text: L("مدى وفيزا وأبل باي، وقسّميها على 4 دفعات", "mada, Visa, Apple Pay, or split it in 4") },
+  { icon: "sicon-gift", title: L("أسعار حقيقية", "Real prices"), text: L("السعر قبل الخصم هو سعرنا طول السنة، والخصم واضح على كل قطعة", "The before price is our price all year, and every discount is shown") },
+]) });
+const REVIEWS = rows("items", [
+  { name: L("نورة", "Noura"), city: L("الرياض", "Riyadh"), rate: 5, text: L("اشتريت فستانين من عرض السنة اللي فاتت، المقاس مظبوط والتوصيل كان بعد يومين بس.", "I bought two dresses in last year's sale. The fit was right and it arrived in two days."), bought: L("فستان سهرة", "Evening dress"), verified: true },
+  { name: L("ريم", "Reem"), city: L("جدة", "Jeddah"), rate: 5, text: L("الخصم كان حقيقي فعلاً، قارنت الأسعار قبل العرض بأسبوع.", "The discount was real. I checked the prices a week before the sale."), bought: L("جاكيت", "Jacket"), verified: true },
+  { name: L("سارة", "Sarah"), city: L("الدمام", "Dammam"), rate: 4, text: L("بدّلت المقاس بدون أي تعقيد، وخدمة العملاء ردّت بسرعة.", "I swapped the size with no hassle, and support replied fast."), bought: L("تنورة", "Skirt"), verified: true },
+]);
+const BEAUTY_REVIEWS = rows("items", [
+  { name: L("هيا", "Haya"), city: L("الرياض", "Riyadh"), rate: 5, text: L("كسبت كود من اللعبة قبل العرض واستخدمته أول يوم، وفّرت كتير.", "I won a code from the game before the sale and used it on day one. I saved a lot."), verified: true },
+  { name: L("لمى", "Lama"), city: L("الخبر", "Khobar"), rate: 5, text: L("كل يوم كنت أفتح باب جديد، وعرض اليوم الخامس كان الأحلى.", "I opened a new door every day, and day five had the best offer."), verified: true },
+  { name: L("دانة", "Dana"), city: L("مكة", "Makkah"), rate: 4, text: L("المنتجات أصلية والتغليف ممتاز، وصلت قبل الموعد.", "Genuine products and lovely packing. It arrived early."), verified: true },
+]);
+const cta = (text, target = "deals") => ({ cta_text: text, cta_target: target });
 
 export const templates = [
   {
+    // Goal: buy the deals
     name: "white-classic",
     id: "3461ff15-d406-440c-8c3b-9dd6c881d264",
     // الأزياء
     category_id: "814202285",
     is_default: true,
-    order: ORDER,
+    order: ["sale-hero", "deal-grid", "deal-bundles", "tier-bar", "why-us", "sale-reviews", "sale-faq"],
     values: {
-      "page-header": { ...logo, brand_color: "#c8102e", default_mode: sel("light", "فاتح"), sticky: true,
-        nav: rows("nav", [{ label: L("العروض", "Deals"), target: "deals" }, { label: L("عرض الساعة", "Hour deal"), target: "hour" }, { label: L("الأسئلة", "FAQ"), target: "faq" }]) },
-      "sale-hero": { preview_phase: sel("live", "أثناء العرض"), start: "2026-11-20 00:00", end: "2026-11-30 23:59" },
-      "bank-offers": { offers: BANKS },
+      "sale-hero": { preview_phase: sel("live", "أثناء العرض"), start: "2026-11-20 00:00", end: "2026-11-30 23:59", brand_color: "#c8102e", default_mode: sel("light", "فاتح") },
       "deal-grid": { products: DEALS, tabs: TABS },
-      "hour-deal": { slots: SLOTS },
-      "tier-bar": { tiers: TIERS },
-      "scratch-coupon": { codes: MYSTERY, discount_text: L("اكشطي واعرفي خصمك: من 10% لحد 40%", "Scratch to find your discount: 10% to 40%") },
       "deal-bundles": BUNDLE,
-      "mystery-box": BOX,
-      "advent-doors": { days: DAYS },
-      "coupon-game": { codes: PRIZES, mode: sel("gifts", "اختاري هدية من 3") },
+      "tier-bar": { tiers: TIERS },
+      "why-us": { ...WHY(L("خايفة المقاس ما يضبط أو الطلب يتأخر في زحمة العروض؟", "Worried about the fit, or a late order in the sale rush?")), ...cta(L("تسوّقي العروض", "Shop the deals")) },
+      "sale-reviews": { items: REVIEWS, total_count: 1240, ...cta(L("تسوّقي العروض", "Shop the deals")) },
       "sale-faq": { faqs: FAQS },
-      "page-footer": footer(L("أكبر تخفيضات السنة على كل المتجر", "The biggest sale of the year, store-wide")),
     },
   },
   {
+    // Goal: grab the deal of the hour before it changes
     name: "black-luxe",
     id: "bb41157f-525c-486a-99b8-844ec03ea5eb",
     category_id: "814202285",
     is_default: false,
-    order: ORDER,
+    order: ["sale-hero", "hour-deal", "deal-grid", "mystery-box", "why-us", "sale-reviews", "sale-faq"],
     values: {
-      "page-header": { ...logo, brand_color: "#b08d57", default_mode: sel("dark", "داكن"), sticky: true,
-        nav: rows("nav", [{ label: L("العروض", "Deals"), target: "deals" }, { label: L("الصندوق", "The box"), target: "box" }, { label: L("الأسئلة", "FAQ"), target: "faq" }]) },
-      "sale-hero": { preview_phase: sel("live", "أثناء العرض"), start: "2026-11-20 00:00", end: "2026-11-30 23:59",
-        live_badge: L("لفترة محدودة", "Limited time"), live_title: L("الجمعة البيضاء بلمسة فاخرة", "A luxe White Friday"), live_subtitle: L("قطع مختارة بخصومات لحد 60%", "Curated pieces up to 60% off") },
-      "bank-offers": { offers: BANKS },
-      "deal-grid": { products: DEALS, tabs: TABS, columns: 3 },
+      "sale-hero": { preview_phase: sel("live", "أثناء العرض"), start: "2026-11-20 00:00", end: "2026-11-30 23:59", brand_color: "#b08d57", default_mode: sel("dark", "داكن"),
+        offers_target: "hour", live_badge: L("لفترة محدودة", "Limited time"), live_title: L("الجمعة البيضاء بلمسة فاخرة", "A luxe White Friday"),
+        live_subtitle: L("كل كام ساعة قطعة فاخرة بخصم أكبر. الحقيها قبل ما تتغير", "Every few hours, a luxe piece at a bigger discount. Grab it before it changes"), live_button: L("شوفي عرض الساعة", "See the hour deal") },
       "hour-deal": { slots: SLOTS },
-      "tier-bar": { tiers: TIERS },
-      "scratch-coupon": { codes: MYSTERY, discount_text: L("اكشطي واعرفي خصمك: من 10% لحد 40%", "Scratch to find your discount: 10% to 40%") },
-      "deal-bundles": BUNDLE,
+      "deal-grid": { products: DEALS, tabs: TABS, columns: 3, title: L("قطع مختارة بخصم", "Curated pieces on sale") },
       "mystery-box": BOX,
-      "advent-doors": { days: DAYS },
-      "coupon-game": { codes: PRIZES, mode: sel("match", "طابقي الكروت") },
+      "why-us": { ...WHY(L("القطع الفاخرة لازم توصل مظبوطة. عشان كده:", "Luxe pieces should arrive just right. That's why:")), ...cta(L("شوفي عرض الساعة", "See the hour deal"), "hour") },
+      "sale-reviews": { items: REVIEWS, total_count: 860, ...cta(L("شوفي عرض الساعة", "See the hour deal"), "hour") },
       "sale-faq": { faqs: FAQS },
-      "page-footer": footer(L("قطع مختارة بخصومات الجمعة البيضاء", "Curated pieces at White Friday prices")),
     },
   },
   {
+    // Goal: win a code before the sale and come back on day one
     name: "coming-soon",
     id: "10c10321-034a-4dac-8887-eb4746082b27",
     // مستحضرات التجميل والعناية
     category_id: "665151403",
     is_default: false,
-    order: ["page-header", "sale-hero", "advent-doors", "coupon-game", "tier-bar", "deal-grid", "hour-deal", "scratch-coupon", "deal-bundles",
-      "mystery-box", "bank-offers", "sale-faq", "page-footer", "sticky-buy"],
+    order: ["sale-hero", "coupon-game", "advent-doors", "why-us", "sale-reviews", "sale-faq"],
     values: {
-      "page-header": { ...logo, brand_color: "#c2185b", default_mode: sel("light", "فاتح"), sticky: true,
-        nav: rows("nav", [{ label: L("التقويم", "Calendar"), target: "doors" }, { label: L("العبي", "Play"), target: "game" }, { label: L("الأسئلة", "FAQ"), target: "faq" }]) },
-      "sale-hero": { preview_phase: sel("before", "قبل العرض"), start: "2026-11-20 00:00", end: "2026-11-30 23:59", early_code: "VIP2026",
-        before_title: L("استعدي للجمعة البيضاء", "Get ready for White Friday"), before_subtitle: L("سجّلي الموعد، والعبي من دلوقتي واكسبي كود تستخدميه أول ما يبدأ", "Save the date, and play now for a code to use on day one") },
-      "advent-doors": { days: DAYS },
+      "sale-hero": { preview_phase: sel("before", "قبل العرض"), start: "2026-11-20 00:00", end: "2026-11-30 23:59", brand_color: "#c2185b", default_mode: sel("light", "فاتح"),
+        before_title: L("استعدي للجمعة البيضاء", "Get ready for White Friday"), before_subtitle: L("العبي من دلوقتي واكسبي كود تستخدميه أول ما يبدأ العرض", "Play now and win a code to use the moment the sale starts"),
+        before_button: L("العبي واكسبي كودك", "Play for your code"), before_target: "game" },
       "coupon-game": { codes: PRIZES, mode: sel("gifts", "اختاري هدية من 3") },
-      "tier-bar": { tiers: TIERS },
-      "deal-grid": { products: DEALS, tabs: TABS },
-      "hour-deal": { slots: SLOTS },
-      "scratch-coupon": { codes: MYSTERY, discount_text: L("اكشطي واعرفي خصمك: من 10% لحد 40%", "Scratch to find your discount: 10% to 40%") },
-      "deal-bundles": BUNDLE,
-      "mystery-box": BOX,
-      "bank-offers": { offers: BANKS },
+      "advent-doors": { days: DAYS },
+      "why-us": { ...WHY(L("", "")), ...cta(L("العبي واكسبي كودك", "Play for your code"), "game") },
+      "sale-reviews": { items: BEAUTY_REVIEWS, total_count: 530, ...cta(L("العبي واكسبي كودك", "Play for your code"), "game") },
       "sale-faq": { faqs: FAQS },
-      "page-footer": footer(L("عروض الجمعة البيضاء على الجمال والعناية", "White Friday offers on beauty and care")),
     },
   },
 ];
+
+// Every section filled in, for the harness, the store screenshots and the help page. Not a Salla template.
+const classic = templates[0].values;
+export const showcase = {
+  name: "showcase",
+  order: ["sale-hero", "deal-grid", "hour-deal", "deal-bundles", "tier-bar", "scratch-coupon", "mystery-box", "advent-doors", "coupon-game",
+    "bank-offers", "why-us", "sale-reviews", "sale-faq", "sticky-buy"],
+  values: {
+    ...classic,
+    "hour-deal": { slots: SLOTS },
+    "scratch-coupon": { codes: MYSTERY, discount_text: L("اكشطي واعرفي خصمك: من 10% لحد 40%", "Scratch to find your discount: 10% to 40%") },
+    "mystery-box": BOX,
+    "advent-doors": { days: DAYS },
+    "coupon-game": { codes: PRIZES, mode: sel("gifts", "اختاري هدية من 3") },
+    "bank-offers": { offers: BANKS },
+  },
+};

@@ -1,44 +1,12 @@
 // Source of truth for the section schemas in twilight-bundle.json and the templates/*.json files.
 // Run from the repo root: node scripts/build-manifest.mjs
 import fs from "node:fs";
-import { templates } from "./lib/templates.mjs";
-import { L, area, checks, collection, color, colorFields, drop, icon, image, line, num, products, sectionBase, sw, text, url, datetime } from "./lib/fields.mjs";
+import { showcase, templates } from "./lib/templates.mjs";
+import { L, area, checks, collection, color, colorFields, ctaFields, drop, icon, image, line, num, products, sectionBase, sw, text, url, datetime } from "./lib/fields.mjs";
 
 const ROOT = process.cwd();
 
 const components = [
-  {
-    title: "رأس الصفحة",
-    icon: "sicon-store",
-    name: "page-header",
-    key: "860672c9-dd03-4677-8d26-f59e529307a4",
-    image: "",
-    props: { "min-height": "76px" },
-    fields: [
-      image("logo", "الشعار", "", "اتركه فارغاً لاستخدام شعار متجرك"),
-      image("logo_dark", "شعار الوضع الداكن", "", "يظهر في الوضع الداكن وفوق الصور في الرأس الشفاف، وبدونه يظهر شعارك باللون الأبيض"),
-      num("logo_height", "ارتفاع الشعار (px)", 56, 24, 140),
-      drop("align", "مكان الشعار", [["center", "الوسط"], ["start", "البداية"]], "center"),
-      line("hd-line-1"),
-      sw("sticky", "تثبيت الرأس أعلى الصفحة عند التمرير", true),
-      sw("transparent", "رأس شفاف فوق القسم الأول", false, "يظهر فوق صورة القسم الأول، وتظهر خلفيته عند التمرير"),
-      sw("show_shadow", "خط سفلي للرأس", true),
-      line("hd-line-2", "روابط أقسام الصفحة"),
-      collection("nav", "رابط", [
-        text("label", "النص", L("", "")),
-        text("target", "معرّف القسم", "", { multilang: false, desc: "نفس المعرّف المكتوب في إعدادات القسم" }),
-      ], [], 0, 6),
-      line("hd-line-3", "زر الشراء"),
-      sw("show_buy", "إظهار زر الشراء", true),
-      text("buy_text", "نص الزر", L("اشتري الآن", "Buy now")),
-      line("hd-line-4", "ألوان الصفحة"),
-      color("brand_color", "لون البراند", "", "لون واحد تُبنى منه ألوان الصفحة كلها في الوضع الفاتح والداكن. اتركه فارغاً لاستخدام ألوان متجرك"),
-      sw("show_mode_toggle", "زر التبديل بين الوضع الفاتح والداكن", true, "يتذكر اختيار العميل"),
-      drop("default_mode", "الوضع الافتراضي للصفحة", [["light", "فاتح"], ["dark", "داكن"], ["system", "حسب جهاز الزائر"]], "light"),
-      // Here the colors adjust the whole page palette, so the header has no scheme of its own
-      ...colorFields({ scheme: false }),
-    ],
-  },
   {
     title: "العرض: قبل وأثناء وبعد",
     icon: "sicon-time",
@@ -59,6 +27,8 @@ const components = [
       text("before_title", "العنوان", L("الجمعة البيضاء جاية", "White Friday is coming"), { max: 80 }),
       area("before_subtitle", "الوصف", L("أكبر تخفيضات السنة. سجّلي الموعد عشان ما يفوتك شيء", "The biggest sale of the year. Save the date so you never miss it")),
       text("before_label", "نص فوق العداد", L("يبدأ العرض بعد", "Starts in")),
+      text("before_button", "الزرار الرئيسي قبل العرض (اختياري)", L("", ""), { desc: "مثل: العبي واكسبي كودك. ينزل للقسم اللي تحت، و\"ذكّريني\" يبقى زرار ثانوي" }),
+      text("before_target", "معرّف القسم اللي الزرار ينزل له", "game", { multilang: false }),
       sw("show_reminder", "زرار \"ذكّريني بالموعد\" (يضيف الموعد لتقويم الجوال)", true),
       url("channel_url", "لينك قناة التنبيهات (واتساب، سناب، تيليجرام...)", ""),
       text("channel_label", "نص زرار القناة", L("تابعينا عشان أول ما يبدأ", "Follow us for the start")),
@@ -77,6 +47,9 @@ const components = [
       area("ended_subtitle", "الوصف", L("شكراً إنك كنتي معانا. تقدري تتسوّقي باقي المنتجات من المتجر", "Thanks for joining us. You can still shop the store")),
       text("ended_button", "نص الزرار", L("تسوّقي من المتجر", "Shop the store")),
       url("ended_url", "لينك الزرار", "", "فارغ يروح للصفحة الرئيسية للمتجر"),
+      line("sh-line-5", "ألوان الصفحة كلها"),
+      color("brand_color", "لون البراند", "", "لون واحد تُبنى منه ألوان كل أقسام الصفحة في الوضع الفاتح والداكن. اتركه فارغاً لاستخدام ألوان متجرك"),
+      drop("default_mode", "وضع الصفحة", [["light", "فاتح"], ["dark", "داكن"], ["system", "حسب جهاز الزائر"]], "light", "الأقسام اللي وضع ألوانها \"حسب وضع الصفحة\" بتتبعه"),
       ...colorFields(),
     ],
   },
@@ -257,6 +230,46 @@ const components = [
     ],
   },
   {
+    title: "ليه تتسوّق معانا",
+    icon: "sicon-shield-check",
+    name: "why-us",
+    key: "4b7f2a61-3c0e-4d1a-9b58-7e2f6c1d8a90",
+    image: "",
+    props: { "min-height": "280px" },
+    fields: [
+      ...sectionBase(L("تسوّقي العروض وانتِ مطمّنة", "Shop the sale with peace of mind"), L("", ""), "why"),
+      area("worry", "القلق اللي بتحلّه", L("", ""), { desc: "سطر قصير عن اللي بيقلق العميل في التخفيضات، مثل: خايفة المقاس ما يجي مظبوط أو الطلب يتأخر؟ اتركه فارغاً لإخفائه" }),
+      collection("items", "ميزة", [icon("icon", "الأيقونة", "sicon-check"), text("title", "الميزة", L("", "")), area("text", "التفاصيل", L("", ""))], [], 0, 6),
+      ...ctaFields(),
+      ...colorFields(),
+    ],
+  },
+  {
+    title: "آراء العملاء",
+    icon: "sicon-star2",
+    name: "sale-reviews",
+    key: "d2e8c5b4-7a19-4f63-8c0d-5b1e9a7f3c26",
+    image: "",
+    props: { "min-height": "320px" },
+    fields: [
+      ...sectionBase(L("عملاؤنا جرّبوا قبلك", "Our customers tried it first"), L("", ""), "reviews"),
+      sw("show_summary", "إظهار متوسط التقييم", true),
+      num("total_count", "عدد التقييمات في متجرك (اختياري)", 0, 0, 1000000, "يظهر بجانب المتوسط. اتركه صفر لعرض عدد الآراء المكتوبة هنا"),
+      collection("items", "رأي", [
+        text("name", "اسم العميل", L("", "")),
+        text("city", "المدينة", L("", "")),
+        num("rate", "التقييم من 5", 5, 1, 5),
+        area("text", "الرأي", L("", "")),
+        text("bought", "اشترى", L("", ""), { desc: "اختياري، مثل فستان سهرة" }),
+        image("image", "صورة المنتج عند العميل", ""),
+        image("avatar", "صورة العميل", "", "اختياري، تظهر الأحرف الأولى بدونها"),
+        sw("verified", "عميل اشترى فعلاً", false, "فعّله فقط لرأي من طلب حقيقي"),
+      ], [], 0, 9),
+      ...ctaFields(),
+      ...colorFields(),
+    ],
+  },
+  {
     title: "أسئلة العرض",
     icon: "sicon-help",
     name: "sale-faq",
@@ -267,28 +280,6 @@ const components = [
       ...sectionBase(L("أسئلة الجمعة البيضاء", "White Friday questions"), L("", ""), "faq"),
       sw("auto_date", "سؤال \"امتى يبدأ؟\" بمواعيد العرض تلقائياً", true),
       collection("faqs", "سؤال", [text("q", "السؤال", L("", "")), area("a", "الإجابة", L("", ""))], [], 0, 10),
-      ...colorFields(),
-    ],
-  },
-  {
-    title: "تذييل الصفحة",
-    icon: "sicon-window-layout",
-    name: "page-footer",
-    key: "e022438d-d96c-4ac7-902f-562117c1acca",
-    image: "",
-    props: { "min-height": "160px" },
-    fields: [
-      image("logo", "الشعار", "", "اتركه فارغاً لاستخدام شعار متجرك"),
-      image("logo_dark", "شعار الوضع الداكن", ""),
-      area("about", "نبذة قصيرة", L("", "")),
-      line("ft-line-1", "التواصل"),
-      text("phone", "رقم الجوال", "", { multilang: false, placeholder: "+966500000000" }),
-      text("whatsapp", "رقم واتساب", "", { multilang: false, placeholder: "966500000000" }),
-      text("email", "البريد الإلكتروني", "", { multilang: false }),
-      collection("social", "حساب", [icon("icon", "الأيقونة", "sicon-instagram"), url("url", "الرابط", "")], [], 0, 6),
-      line("ft-line-2"),
-      sw("show_payments", "إظهار وسائل الدفع المفعلة في المتجر", true),
-      text("copyright", "نص الحقوق", L("© {year} {store}", "© {year} {store}"), { desc: "{year} تصبح السنة الحالية و{store} اسم متجرك" }),
       ...colorFields(),
     ],
   },
@@ -344,5 +335,7 @@ for (const t of templates) {
   const list = t.order.map((name) => applyValues(components.find((c) => c.name === name), t.values[name]));
   fs.writeFileSync(`${ROOT}/templates/${t.name}.json`, JSON.stringify({ id: t.id, components: list }, null, 2) + "\n");
 }
+// The harness page with every section filled in (?template=../harness/showcase.json)
+fs.writeFileSync(`${ROOT}/harness/showcase.json`, JSON.stringify({ components: showcase.order.map((name) => applyValues(components.find((c) => c.name === name), showcase.values[name])) }, null, 2) + "\n");
 console.log("components:", components.map((c) => c.name).join(", ") || "(none)");
 console.log("templates:", templates.map((t) => `${t.name}(${t.order.length})`).join(", ") || "(none)");

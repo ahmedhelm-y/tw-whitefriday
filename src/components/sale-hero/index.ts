@@ -1,9 +1,10 @@
 import { html, nothing } from "lit";
 import { state } from "lit/decorators.js";
-import { resolveText, t, webUrl } from "../../utils/config";
+import { anchorId, resolveText, t, webUrl } from "../../utils/config";
 import { getSalla, isLandingPage } from "../../utils/landing";
 import { calendarLink, isUnlocked, phaseAt, publishSale, sameCode, splitCountdown, storeTime, unlock, type Phase } from "../../utils/sale";
-import { WfSection } from "../../utils/section";
+import { scrollToSection, WfSection } from "../../utils/section";
+import { applyPageTheme, clearPageTheme } from "../../utils/theme";
 
 const css = `
 .wf-sh { position: relative; overflow: hidden; }
@@ -66,6 +67,7 @@ export default class SaleHero extends WfSection {
   disconnectedCallback() {
     super.disconnectedCallback();
     window.clearInterval(this.timer);
+    clearPageTheme();
   }
 
   private dates() {
@@ -80,6 +82,9 @@ export default class SaleHero extends WfSection {
   }
 
   protected willUpdate() {
+    // Only the brand color and the page mode are page-wide; the hero's own colors stay on the hero
+    const cfg = this.cfg();
+    applyPageTheme({ brand_color: cfg.brand_color, default_mode: cfg.default_mode });
     // A phase change (the sale starting or ending while the page is open) tells the other sections
     const { start, end } = this.dates();
     const phase = this.phase(start, end);
@@ -107,7 +112,7 @@ export default class SaleHero extends WfSection {
 
   private scrollToOffers() {
     const target = String(this.cfg().offers_target || "deals").replace(/^#/, "");
-    document.querySelector(`[data-wf-section="${target}"]`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToSection(target);
   }
 
   private renderClock(ms: number, label: string) {
@@ -135,6 +140,8 @@ export default class SaleHero extends WfSection {
     const channel = webUrl(cfg.channel_url);
     const endedUrl = webUrl(cfg.ended_url) || storeUrl;
     const showEarly = phase === "before" && String(cfg.early_code || "").trim();
+    // Before the sale the page's goal can be a section (a game or the daily doors) instead of the reminder
+    const beforeButton = resolveText(cfg.before_button);
 
     return this.frame(html`
       ${image ? html`<img class="wf-sh__bg" src=${image} alt="" fetchpriority="high" /><span class="wf-sh__veil" style=${`--wf-sh-veil:${Math.min(Math.max(Number(cfg.overlay ?? 45), 0), 85) / 100}`}></span>` : nothing}
@@ -144,8 +151,11 @@ export default class SaleHero extends WfSection {
         ${pick("subtitle") ? html`<p class="wf-sh__sub">${pick("subtitle")}</p>` : nothing}
         ${middle}
         <div class="wf-sh__actions">
+          ${phase === "before" && beforeButton && !unlocked
+            ? html`<button type="button" class="wf-btn" @click=${() => scrollToSection(anchorId(cfg.before_target) || "game")}>${beforeButton}</button>`
+            : nothing}
           ${phase === "before" && start !== null && cfg.show_reminder !== false
-            ? html`<a class="wf-btn" href=${calendarLink(title, start, end, storeUrl)} download="white-friday.ics">${t({ ar: "ذكّريني بالموعد", en: "Remind me" })}</a>`
+            ? html`<a class=${`wf-btn${beforeButton && !unlocked ? " wf-sh__ghost" : ""}`} href=${calendarLink(title, start, end, storeUrl)} download="white-friday.ics">${t({ ar: "ذكّريني بالموعد", en: "Remind me" })}</a>`
             : nothing}
           ${phase === "before" && channel ? html`<a class="wf-btn wf-sh__ghost" href=${channel} target="_blank" rel="noopener">${resolveText(cfg.channel_label) || t({ ar: "تابعينا عشان أول ما يبدأ", en: "Follow us for the start" })}</a>` : nothing}
           ${phase === "live" || (phase === "before" && unlocked)

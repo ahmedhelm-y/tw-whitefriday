@@ -29,11 +29,19 @@ export const collection = (id, itemLabel, fields, value, min, max) => ({ id, typ
 export const line = (id, label) =>
   label ? { id, type: "static", format: "description", value: `<strong>${label}</strong>` } : { id, type: "static", format: "line" };
 
+/** The page's primary button repeated at the end of a section; it scrolls down to the deals. */
+export const ctaFields = () => [
+  line("cta-line", "زرار العرض"),
+  sw("show_cta", "إظهار الزرار في آخر القسم", true),
+  text("cta_text", "نص الزرار", L("تسوّقي العروض", "Shop the deals")),
+  text("cta_target", "معرّف القسم اللي الزرار ينزل له", "deals", { multilang: false }),
+];
+
 /** Title, subtitle and the anchor id the header's links scroll to. */
 export const sectionBase = (title = L("", ""), subtitle = L("", ""), sectionId = "") => [
   text("title", "العنوان", title),
   text("subtitle", "الوصف", subtitle),
-  text("section_id", "معرّف القسم (للروابط)", sectionId, { multilang: false, desc: "كلمة إنجليزية بدون مسافات مثل notes، واكتبها في روابط رأس الصفحة لتنتقل لهذا القسم" }),
+  text("section_id", "معرّف القسم (للروابط)", sectionId, { multilang: false, desc: "كلمة إنجليزية بدون مسافات مثل deals. الأزرار اللي بتنزل لقسم بتستخدمه" }),
 ];
 
 const COLOR_TOKENS = [
@@ -52,5 +60,5 @@ export const colorFields = (o = {}) => [
   ...COLOR_TOKENS.map(([token, label]) => color(`d_${token}`, label, "")),
   ...(o.scheme === false
     ? []
-    : [drop("color_scheme", "وضع الألوان", [["auto", "حسب وضع الصفحة"], ["light", "فاتح دائماً"], ["dark", "داكن دائماً"]], "auto", "حسب وضع الصفحة يتبع زر الوضع في رأس الصفحة، أو جهاز الزائر إذا لم تستخدم رأس الصفحة")]),
+    : [drop("color_scheme", "وضع الألوان", [["auto", "حسب وضع الصفحة"], ["light", "فاتح دائماً"], ["dark", "داكن دائماً"]], "auto", "حسب وضع الصفحة يتبع \"وضع الصفحة\" في قسم العرض، أو جهاز الزائر إذا لم تستخدم قسم العرض")]),
 ];

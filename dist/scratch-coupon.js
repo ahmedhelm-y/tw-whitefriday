@@ -1,10 +1,9 @@
 import { nothing as m, html as f } from "lit";
 import { state as b } from "lit/decorators.js";
-import { b as y } from "./buy-Dta8ARKq.js";
-import { g as x, r as w, t as c, i as C } from "./styles-B5EzsqQ8.js";
+import { g as y, r as w, t as c, i as x, b as C } from "./styles-DA4N1FjE.js";
 import { r as v, i as k } from "./coupon-MHx38xkB.js";
-import { W as $, b as S } from "./section-CJM2ceBk.js";
-import { a as z } from "./codecard-mxGB7zrM.js";
+import { W as $, b as S } from "./section-sTarKlwB.js";
+import { a as z } from "./codecard-DXKWdLO_.js";
 var I = Object.defineProperty, _ = (g, e, s, i) => {
   for (var t = void 0, r = g.length - 1, o; r >= 0; r--)
     (o = g[r]) && (t = o(e, s, t) || t);
@@ -54,7 +53,7 @@ class u extends $ {
   /** The mystery codes with their chances, or the single code; each visitor keeps the one they got. */
   picked() {
     if (this.pickCache !== void 0) return this.pickCache;
-    const e = this.cfg(), s = x(e.codes, "codes").map((t) => ({ code: String(t.code || "").trim(), label: w(t.label), weight: Number(t.weight) || 0 })).filter((t) => t.code && t.weight > 0), i = String(e.code || "").trim();
+    const e = this.cfg(), s = y(e.codes, "codes").map((t) => ({ code: String(t.code || "").trim(), label: w(t.label), weight: Number(t.weight) || 0 })).filter((t) => t.code && t.weight > 0), i = String(e.code || "").trim();
     return this.pickCache = s.length ? S("wf-mystery", s) : i ? { code: i, label: "", weight: 1 } : null, this.pickCache;
   }
   code() {
@@ -127,7 +126,7 @@ class u extends $ {
     var r;
     const e = this.cfg(), s = z(e) ? this.code() : "", i = k(e.expires);
     if (!s || i)
-      return C() ? m : this.frame(f`<p class="wf-sc__note">${s ? c({ ar: "انتهى هذا الكوبون، ولن يظهر للعملاء", en: "This coupon has expired and is hidden from shoppers" }) : c({ ar: "اكتب كود الخصم في إعدادات هذا القسم", en: "Add the discount code in this section's settings" })}</p>`);
+      return x() ? m : this.frame(f`<p class="wf-sc__note">${s ? c({ ar: "انتهى هذا الكوبون، ولن يظهر للعملاء", en: "This coupon has expired and is hidden from shoppers" }) : c({ ar: "اكتب كود الخصم في إعدادات هذا القسم", en: "Add the discount code in this section's settings" })}</p>`);
     const t = this.revealed && ((r = this.picked()) == null ? void 0 : r.label) || w(e.discount_text) || c({ ar: "خصم خاص على طلبك", en: "A special discount on your order" });
     return this.frame(f`<div class="wf-sc__card">
         <p class="wf-sc__deal">${t}</p>
@@ -151,7 +150,7 @@ class u extends $ {
         <p class="wf-sc__status" aria-live="polite">${this.status}</p>
         <div class="wf-sc__actions">
           ${this.revealed ? f`<button type="button" class="wf-btn wf-sc__ghost" @click=${() => this.copy()}>${c({ ar: "نسخ الكود", en: "Copy code" })}</button>` : f`<button type="button" class="wf-btn wf-sc__ghost" @click=${() => this.reveal()}>${c({ ar: "اكشف الكود", en: "Reveal the code" })}</button>`}
-          ${y() !== "none" ? f`<button type="button" class="wf-btn" aria-busy=${this.busy ? "true" : "false"} @click=${() => this.press({ quantity: 1 })}>${this.buyLabel()}</button>` : m}
+          ${C() !== "none" ? f`<button type="button" class="wf-btn" aria-busy=${this.busy ? "true" : "false"} @click=${() => this.press({ quantity: 1 })}>${this.buyLabel()}</button>` : m}
         </div>
       </div>`, { extraClass: "wf-sc" });
   }

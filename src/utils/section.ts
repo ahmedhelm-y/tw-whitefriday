@@ -8,6 +8,13 @@ import { offersOpen } from "./sale";
 import { reveal } from "./reveal";
 import { ensureBase, injectStyles } from "./styles";
 
+/** Smooth scroll to a section by the id typed in its settings. */
+export function scrollToSection(id: string): void {
+  const section = document.querySelector(`[data-wf-section="${CSS.escape(id)}"]`);
+  const still = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  section?.scrollIntoView({ behavior: still ? "auto" : "smooth", block: "start" });
+}
+
 /** The page's own product on a product page, else the product picked in the section's field. */
 export function productIdFrom(cfg: Record<string, any>, field = "product"): string | null {
   const own = landingProductId();
@@ -87,6 +94,18 @@ export abstract class WfSection extends LitElement {
       this.error = result.message || "";
       (getSalla() as any)?.error?.(result.message);
     }
+  }
+
+  /**
+   * The page's one primary action, repeated at the end of a section: the same button that takes the
+   * shopper down to the deals. Hidden when the merchant clears its text.
+   */
+  protected renderCta() {
+    const cfg = this.cfg();
+    const label = resolveText(cfg.cta_text);
+    const target = anchorId(cfg.cta_target) || "deals";
+    if (!label || cfg.show_cta === false) return nothing;
+    return html`<div class="wf-cta"><button type="button" class="wf-btn" @click=${() => scrollToSection(target)}>${label}</button></div>`;
   }
 
   protected frame(body: TemplateResult | typeof nothing, o: { extraClass?: string; hero?: boolean; title?: boolean } = {}) {
